@@ -55,7 +55,7 @@ var carbonitexKey string
 func init() {
 	flag.BoolVar(&youtubeURL, "youtubeurl", false, "Generates a URL that provides an auth code.")
 	flag.StringVar(&youtubeAuth, "youtubeauth", "", "Exchanges the provided auth code for an oauth2 token.")
-	flag.StringVar(&youtubeConfigFilename, "youtubeconfig", "youtubeoauth2config.json", "The filename that contains the oauth2 config.")
+	flag.StringVar(&youtubeConfigFilename, "youtubeconfig", "", "The filename that contains the oauth2 config.")
 	flag.StringVar(&youtubeTokenFilename, "youtubetoken", "youtubeoauth2token.json", "The filename to store the oauth2 token.")
 	flag.StringVar(&youtubeChannelIDs, "youtubechannelids", "", "Comma separated list of channel ids to poll.")
 	flag.IntVar(&youtubeInvitePort, "youtubeinviteport", 7777, "The port to listen for invites.")
@@ -105,20 +105,27 @@ func main() {
 		}
 	}, nil)
 
-	youtube := bruxism.NewYouTube(youtubeURL, youtubeAuth, youtubeConfigFilename, youtubeTokenFilename)
-	err := youtube.Init()
-	if err != nil {
-		log.Fatal(err)
-	}
+	youtube := bruxism.NewYouTube(false, "", "", "")
+	ytLiveChannel :=  bruxism.NewYTLiveChannel(nil)
+	ytip := youtubejoinplugin.New(nil)
 
-	ytLiveChannel := bruxism.NewYTLiveChannel(youtube.Service)
-	ytip := youtubejoinplugin.New(ytLiveChannel)
+	if(youtubeConfigFilename != "") {
+		youtube := bruxism.NewYouTube(youtubeURL, youtubeAuth, youtubeConfigFilename, youtubeTokenFilename)
+		err := youtube.Init()
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	bot.RegisterService(youtube)
+		ytLiveChannel := bruxism.NewYTLiveChannel(youtube.Service)
+		ytip := youtubejoinplugin.New(ytLiveChannel)
 
-	bot.RegisterPlugin(youtube, cp)
+		log.Println("Registering Youtube Service")
+		bot.RegisterService(youtube)
+
+		bot.RegisterPlugin(youtube, cp)
 
 	bot.RegisterPlugin(youtube, chartplugin.New())
+	bot.RegisterPlugin(youtube, comicplugin.New())
 	bot.RegisterPlugin(youtube, liveplugin.New(ytLiveChannel))
 	bot.RegisterPlugin(youtube, reminderplugin.New())
 	bot.RegisterPlugin(youtube, streamerplugin.New(youtube))
@@ -137,6 +144,8 @@ func main() {
 		discord.ApplicationClientID = discordApplicationClientID
 		discord.OwnerUserID = discordOwnerUserID
 		discord.Shards = discordShards
+
+		log.Println("Registering Discord Service")
 		bot.RegisterService(discord)
 
 		bot.RegisterPlugin(discord, cp)
@@ -148,46 +157,59 @@ func main() {
 		bot.RegisterPlugin(discord, chartplugin.New())
 		bot.RegisterPlugin(discord, discordavatarplugin.New())
 		bot.RegisterPlugin(discord, emojiplugin.New())
-		bot.RegisterPlugin(discord, liveplugin.New(ytLiveChannel))
 		bot.RegisterPlugin(discord, musicplugin.New(discord))
 		bot.RegisterPlugin(discord, mysonplugin.New())
 		bot.RegisterPlugin(discord, playedplugin.New())
 		bot.RegisterPlugin(discord, playingplugin.New())
 		bot.RegisterPlugin(discord, reminderplugin.New())
-		bot.RegisterPlugin(discord, streamerplugin.New(youtube))
-		bot.RegisterPlugin(discord, topstreamersplugin.New(youtube))
 		bot.RegisterPlugin(discord, triviaplugin.New())
+		if(youtubeConfigFilename != "") {
+			bot.RegisterPlugin(discord, streamerplugin.New(youtube))
+			bot.RegisterPlugin(discord, topstreamersplugin.New(youtube))
+			bot.RegisterPlugin(discord, liveplugin.New(ytLiveChannel))
+		}
 	}
 
 	// Register the IRC service if we have an IRC server and username.
 	if ircServer != "" && ircUsername != "" {
 		irc := bruxism.NewIRC(ircServer, ircUsername, ircPassword, strings.Split(ircChannels, ","))
+
+		log.Println("Registering IRC Service")
 		bot.RegisterService(irc)
 
 		bot.RegisterPlugin(irc, cp)
 
 		bot.RegisterPlugin(irc, chartplugin.New())
-		bot.RegisterPlugin(irc, liveplugin.New(ytLiveChannel))
 		bot.RegisterPlugin(irc, reminderplugin.New())
-		bot.RegisterPlugin(irc, streamerplugin.New(youtube))
-		bot.RegisterPlugin(irc, topstreamersplugin.New(youtube))
 		bot.RegisterPlugin(irc, triviaplugin.New())
+		if(youtubeConfigFilename != "") {
+			bot.RegisterPlugin(irc, streamerplugin.New(youtube))
+			bot.RegisterPlugin(irc, topstreamersplugin.New(youtube))
+			bot.RegisterPlugin(irc, liveplugin.New(ytLiveChannel))
+		}
 	}
 
 	// Register the Slack service if we have a Slack token.
 	if slackToken != "" {
 		slack := bruxism.NewSlack(slackToken)
 		slack.OwnerUserID = slackOwnerUserID
+
+		log.Println("Registering Slack Service")
 		bot.RegisterService(slack)
 
 		bot.RegisterPlugin(slack, cp)
 
 		bot.RegisterPlugin(slack, chartplugin.New())
-
+		bot.RegisterPlugin(slack, comicplugin.New())
 		bot.RegisterPlugin(slack, liveplugin.New(ytLiveChannel))
 		bot.RegisterPlugin(slack, streamerplugin.New(youtube))
 		bot.RegisterPlugin(slack, topstreamersplugin.New(youtube))
 		bot.RegisterPlugin(slack, triviaplugin.New())
+		if(youtubeConfigFilename != "") {
+			bot.RegisterPlugin(slack, streamerplugin.New(youtube))
+			bot.RegisterPlugin(slack, topstreamersplugin.New(youtube))
+			bot.RegisterPlugin(slack, liveplugin.New(ytLiveChannel))
+		}
 	}
 
 	// Start all our services.
