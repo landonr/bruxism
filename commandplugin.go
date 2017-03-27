@@ -24,7 +24,8 @@ func NewCommandHelp(args, help string) CommandHelpFunc {
 // Commands will be matched ignoring case with a prefix if they are not private messages.
 func MatchesCommandString(service Service, commandString string, private bool, message string) bool {
 	lowerMessage := strings.ToLower(strings.TrimSpace(message))
-	lowerPrefix := strings.ToLower(service.CommandPrefix())
+	lowerPrefixStripped := strings.Split(service.CommandPrefix(), ":")[0]
+	lowerPrefix := strings.ToLower(lowerPrefixStripped)
 
 	if strings.HasPrefix(lowerMessage, lowerPrefix) {
 		lowerMessage = lowerMessage[len(lowerPrefix):]
@@ -52,7 +53,8 @@ func ParseCommandString(service Service, message string) (string, []string) {
 	message = strings.TrimSpace(message)
 
 	lowerMessage := strings.ToLower(message)
-	lowerPrefix := strings.ToLower(service.CommandPrefix())
+	lowerPrefixStripped := strings.Split(service.CommandPrefix(), ":")[0]
+	lowerPrefix := strings.ToLower(lowerPrefixStripped)
 
 	if strings.HasPrefix(lowerMessage, lowerPrefix) {
 		message = message[len(lowerPrefix):]
