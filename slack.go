@@ -24,7 +24,11 @@ func (m *SlackMessage) Channel() string {
 
 // UserName returns the user name for this message.
 func (m *SlackMessage) UserName() string {
-	return m.SlackMessage.Username
+	if(m.SlackMessage.Username != "") {
+		return m.SlackMessage.Username
+	} else {
+		return m.SlackMessage.User
+	}
 }
 
 // UserID returns the user id for this message.
