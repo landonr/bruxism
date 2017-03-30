@@ -14,6 +14,7 @@ import (
 )
 
 // VersionString is the current version of the bot
+var verbose bool
 const VersionString string = "0.11"
 
 type serviceEntry struct {
@@ -28,6 +29,7 @@ type Bot struct {
 	ImgurID     string
 	ImgurAlbum  string
 	MashableKey string
+	Verbose bool
 }
 
 // MessageRecover is the default panic handler for bruxism.
@@ -77,7 +79,9 @@ func (b *Bot) listen(service Service, messageChan <-chan Message) {
 	serviceName := service.Name()
 	for {
 		message := <-messageChan
-		log.Printf("<%s> %s: %s\n", message.Channel(), message.UserName(), message.Message())
+		if(b.Verbose == true) {
+			log.Printf("<%s> %s: %s\n", message.Channel(), message.UserName(), message.Message())
+		}
 		plugins := b.Services[serviceName].Plugins
 		for _, plugin := range plugins {
 			go plugin.Message(b, service, message)

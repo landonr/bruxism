@@ -29,6 +29,7 @@ import (
 	"github.com/iopred/bruxism/youtubejoinplugin"
 )
 
+var verbose bool
 var youtubeURL bool
 var youtubeAuth string
 var youtubeConfigFilename string
@@ -53,6 +54,7 @@ var mashableKey string
 var carbonitexKey string
 
 func init() {
+	flag.BoolVar(&verbose, "verbose", false, "Logs every message")
 	flag.BoolVar(&youtubeURL, "youtubeurl", false, "Generates a URL that provides an auth code.")
 	flag.StringVar(&youtubeAuth, "youtubeauth", "", "Exchanges the provided auth code for an oauth2 token.")
 	flag.StringVar(&youtubeConfigFilename, "youtubeconfig", "", "The filename that contains the oauth2 config.")
@@ -88,6 +90,7 @@ func main() {
 	bot.ImgurID = imgurID
 	bot.ImgurAlbum = imgurAlbum
 	bot.MashableKey = mashableKey
+	bot.Verbose = verbose
 
 	// Generally CommandPlugins don't hold state, so we share one instance of the command plugin for all services.
 	cp := bruxism.NewCommandPlugin()
