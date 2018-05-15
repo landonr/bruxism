@@ -14,8 +14,8 @@ import (
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/plotutil"
 	"gonum.org/v1/plot/vg"
-	"github.com/iopred/bruxism"
-	"github.com/iopred/discordgo"
+	"github.com/landonr/bruxism"
+	"github.com/landonr/discordgo"
 )
 
 type chartPlugin struct {

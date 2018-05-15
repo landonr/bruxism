@@ -6,7 +6,7 @@ import (
 	"log"
 	"regexp"
 
-	"github.com/iopred/discordgo"
+	"github.com/landonr/discordgo"
 )
 
 // The number of guilds supported by one shard.

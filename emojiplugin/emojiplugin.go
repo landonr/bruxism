@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/iopred/bruxism"
+	"github.com/landonr/bruxism"
 )
 
 func emojiFile(base, s string) string {

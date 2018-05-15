@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
-	"github.com/iopred/bruxism"
-	"github.com/iopred/discordgo"
+	"github.com/landonr/bruxism"
+	"github.com/landonr/discordgo"
 )
 
 type playedEntry struct {

@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/iopred/bruxism"
+	"github.com/landonr/bruxism"
 )
 
 type playingPlugin struct {

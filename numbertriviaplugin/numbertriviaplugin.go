@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/iopred/bruxism"
+	"github.com/landonr/bruxism"
 )
 
 func numberTrivia(bot *bruxism.Bot, num int, notfound bool) (string, error) {

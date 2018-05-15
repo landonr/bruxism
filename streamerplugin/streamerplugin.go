@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
-	"github.com/iopred/bruxism"
+	"github.com/landonr/bruxism"
 )
 
 type streamerPluginRequest struct {

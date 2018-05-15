@@ -16,9 +16,9 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
-	"github.com/iopred/bruxism"
-	"github.com/iopred/comicgen"
-	"github.com/iopred/discordgo"
+	"github.com/landonr/bruxism"
+	"github.com/landonr/comicgen"
+	"github.com/landonr/discordgo"
 )
 
 type comicPlugin struct {

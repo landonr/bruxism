@@ -9,7 +9,7 @@ import (
 
 	"google.golang.org/api/youtube/v3"
 
-	"github.com/iopred/bruxism"
+	"github.com/landonr/bruxism"
 )
 
 type livePlugin struct {

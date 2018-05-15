@@ -8,7 +8,7 @@ import (
 
 	"google.golang.org/api/youtube/v3"
 
-	"github.com/iopred/bruxism"
+	"github.com/landonr/bruxism"
 )
 
 // YouTubeJoinPlugin is a plugin that monitors channels, and when they go live, will join the service
